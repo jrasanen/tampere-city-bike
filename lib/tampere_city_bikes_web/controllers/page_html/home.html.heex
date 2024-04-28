@@ -1,0 +1,23 @@
+<.flash_group flash={@flash} />
+
+<div id="mapid" style="width: 100vw; height: 100vw;"></div>
+<script>
+    var tampere = L.map('mapid').setView([61.4386,23.8216], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(tampere);
+
+    var points = <%= raw @dock_groups %>;
+
+    points.forEach(function(point) {
+      var popupContent = `
+        <strong>${point.title}</strong><br>
+        Available Vehicles: ${point.availableVehicles}<br>
+        Available Docks: ${point.availableDocks}
+      `;
+      L.marker([point.lat, point.lon])
+          .addTo(tampere)
+          .bindPopup(popupContent);
+    });
+</script>
